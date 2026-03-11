@@ -1,6 +1,6 @@
 import { Outlet } from "react-router"
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 
 export const SocialLayout = () => {
@@ -10,7 +10,6 @@ export const SocialLayout = () => {
         <AppSidebar />
         <div className="flex flex-col w-full">
           <header className="flex items-center p-2 pt-0">
-            {/* <SidebarTrigger /> */}
           </header>
           <main className="flex flex-col overflow-hidden dark-mode px-7 sm:px-17">
             <Outlet />
