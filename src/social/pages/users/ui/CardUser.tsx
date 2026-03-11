@@ -1,8 +1,6 @@
 import type { User } from "@/auth/interfaces/UserResponse.interface"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { UserPlus } from "lucide-react"
 
 interface Props {
   user: User
