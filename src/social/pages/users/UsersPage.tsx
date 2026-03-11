@@ -23,10 +23,10 @@ export const UsersPage = () => {
   }
   if (isLoading) return <span>Cargando datos...</span>
   return (
-    <div className="flex flex-col flex-1 min-h-0 p-4 gap-4">
+    <div className="flex flex-col p-4 gap-4">
       <h1 className="text-xl font-bold">Usuarios</h1>
 
-      <div className="flex-1 h-200">
+      <div className="flex-1 ">
         <AnimatedList
           className="w-full h-full"
           items={data!.data}
