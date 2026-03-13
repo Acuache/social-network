@@ -85,6 +85,7 @@ export const useSessionStore = create<SessionStore>()((set) => {
     } else if (event === "SIGNED_IN") {
       set({ session });
       console.log("Ejecutado -> SIGNED_IN");
+      console.log("---");
     } else if (event === "SIGNED_OUT") {
       set({ session: null });
       queryClient.clear();

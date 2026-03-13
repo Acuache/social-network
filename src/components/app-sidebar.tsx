@@ -16,6 +16,8 @@ import { Link, useLocation } from "react-router"
 import { useTheme } from "@/components/theme-provider"
 import { useSignOutMutate } from "@/auth/stack/SignOutStack"
 import { useUserProfileQuery } from "@/auth/stack/UserStack"
+import { useModalStorage } from "@/social/store/useModalStorage"
+import { PostForm } from "@/social/pages/home/ui/PostForm"
 
 
 const projects = [
@@ -41,9 +43,14 @@ export function AppSidebar() {
   const { theme, setTheme } = useTheme()
   const { data: currentUser } = useUserProfileQuery()
   const { mutate: signOutMutate, isPending: signOutIsPending } = useSignOutMutate()
+  const { showModal, setShowModal } = useModalStorage()
   return (
     <Sidebar variant='inset' collapsible="none" className="bg-bg-light dark:bg-bg-dark md:w-[16rem]">
-
+      {
+        showModal && (
+          <PostForm />
+        )
+      }
       <SidebarHeader className="bg-bg-light dark:bg-bg-dark">
         <SidebarMenu>
           <SidebarMenuItem>
@@ -102,7 +109,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton className="bg-black text-white [&>svg]:size-5 text-sm text-nowrap">
+            <SidebarMenuButton className="bg-black text-white [&>svg]:size-5 text-sm text-nowrap" onClick={setShowModal}>
               <MessageSquare /> <span className="hidden md:inline">Nuevo Post</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
