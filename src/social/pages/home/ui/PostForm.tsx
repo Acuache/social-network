@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button"
 import { useEffect, useRef, useState } from "react"
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 import imageCompression from "browser-image-compression"
+import { usePostStackMutation } from "@/social/stack/PostStack"
 
 export const PostForm = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
@@ -30,6 +31,7 @@ export const PostForm = () => {
   const [mediaType, setMediaType] = useState<'image' | 'video' | null>(null)
   const [mediaError, setMediaError] = useState<string | null>(null)
 
+  const { mutate: postPublicationMutate, isPending: postPublicationIsPending, data: postPublicationData } = usePostStackMutation()
 
   useEffect(() => {
     if (!showEmojiPicker) return
@@ -50,11 +52,14 @@ export const PostForm = () => {
     const description = ((formData.get('description') as string) ?? '').trim()
 
     const payload = {
-      userId: currentUser!.id,
+      id_user: currentUser!.id,
       description,
-      media: media ?? null,
+      type_file: mediaType,
+      file: media ?? null,
     }
-    console.log(payload)
+    postPublicationMutate(payload)
+    console.log('-> payload', payload)
+    console.log('-> postPublicationData', postPublicationData)
   }
 
   const handleDrag = (e: React.DragEvent) => {
@@ -131,8 +136,6 @@ export const PostForm = () => {
     }
     await validateAndSelectMedia(files[0])
   }
-
-  console.log(media)
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 backdrop-blur-xl" onClick={setShowModal} >
       <form className="" onClick={(e) => e.stopPropagation()} onSubmit={onSubmit} >
@@ -162,7 +165,11 @@ export const PostForm = () => {
           </CardContent>
 
           <CardFooter className="flex items-center justify-between">
-            <Button>Publicar</Button>
+            <Button disabled={postPublicationIsPending}>
+              {
+                postPublicationIsPending ? 'Publicando...' : 'Publicar'
+              }
+            </Button>
             <div className="flex gap-2">
               <div className="relative" ref={emojiRef}>
                 <Smile className="cursor-pointer" onClick={() => setShowEmojiPicker(!showEmojiPicker)} />
