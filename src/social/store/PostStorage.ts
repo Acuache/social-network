@@ -6,9 +6,15 @@ interface PostStorage {
   insertPost: (
     dataPost: Partial<PostPublicationResponse>,
   ) => Promise<PostPublicationResponse>;
+  dataPost: PostPublicationResponse[] | null;
+  getPostWithDetails: (
+    to: number,
+    limit: number,
+    id_user: string,
+  ) => Promise<PostPublicationResponse[]>;
 }
 
-export const usePostStorage = create<PostStorage>()(() => ({
+export const usePostStorage = create<PostStorage>()((set) => ({
   insertPost: async (dataPost: Partial<PostPublicationResponse>) => {
     // Guardando el post de publicación en la tabla publications sin el file
     const { file, ...current } = dataPost;
@@ -16,7 +22,7 @@ export const usePostStorage = create<PostStorage>()(() => ({
       await supabase.from("publications").insert(current).select().single();
     if (errorCurrentPublication) throw errorCurrentPublication;
 
-    if (!file) currentPublication;
+    if (!file) return currentPublication;
 
     // Subimos el archivo a supabase
     const new_id = currentPublication.id;
@@ -40,5 +46,16 @@ export const usePostStorage = create<PostStorage>()(() => ({
       .eq("id", new_id);
     if (errorUpdate) throw errorUpdate;
     return { ...currentPublication, file: publicUrlData.publicUrl };
+  },
+  dataPost: null,
+  getPostWithDetails: async (to: number, from: number, id_user: string) => {
+    const { data, error } = await supabase
+      .rpc("publications_with_details", {
+        _id_user: id_user,
+      })
+      .range(to, to + from - 1);
+    if (error) throw error;
+    set({ dataPost: data });
+    return data;
   },
 }));
