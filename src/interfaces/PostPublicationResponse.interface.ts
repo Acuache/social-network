@@ -5,5 +5,5 @@ export interface PostPublicationResponse {
   id_user: string;
   likes: number;
   type_file?: string | null;
-  file: null | string;
+  file: null | string | File;
 }

@@ -19,6 +19,7 @@ import imageCompression from "browser-image-compression"
 import { usePostStackMutation } from "@/social/stack/PostStack"
 
 export const PostForm = () => {
+  const [hasText, setHasText] = useState(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const emojiRef = useRef<HTMLDivElement>(null)
@@ -161,11 +162,12 @@ export const PostForm = () => {
               className="resize-none h-25"
               name="description"
               placeholder="¿Qué estas pensando ahora?"
+              onChange={(e) => setHasText(e.target.value.trim().length > 0)}
             />
           </CardContent>
 
           <CardFooter className="flex items-center justify-between">
-            <Button disabled={postPublicationIsPending}>
+            <Button disabled={postPublicationIsPending || (!hasText && mediaType === null)} >
               {
                 postPublicationIsPending ? 'Publicando...' : 'Publicar'
               }
