@@ -16,7 +16,7 @@ export const usePostStorage = create<PostStorage>()(() => ({
       await supabase.from("publications").insert(current).select().single();
     if (errorCurrentPublication) throw errorCurrentPublication;
 
-    if (!file) return;
+    if (!file) currentPublication;
 
     // Subimos el archivo a supabase
     const new_id = currentPublication.id;
@@ -34,10 +34,11 @@ export const usePostStorage = create<PostStorage>()(() => ({
       .getPublicUrl(data!.path);
 
     // Actualizando la tabla de post
-    await supabase
+    const { error: errorUpdate } = await supabase
       .from("publications")
       .update({ file: publicUrlData.publicUrl })
       .eq("id", new_id);
-    return currentPublication;
+    if (errorUpdate) throw errorUpdate;
+    return { ...currentPublication, file: publicUrlData.publicUrl };
   },
 }));
