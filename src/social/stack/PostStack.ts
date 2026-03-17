@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { usePostStorage } from "../store/PostStorage";
 import { useModalStorage } from "../store/useModalStorage";
 import { toast } from "sonner";
@@ -23,14 +23,21 @@ export const usePostStackMutation = () => {
   });
 };
 
-export const usePostQuery = (to = 0, from = 9) => {
+export const usePostQuery = (pageSize = 9) => {
   const session = useSessionStore((state) => state.session);
   const getPostWithDetails = usePostStorage(
     (state) => state.getPostWithDetails,
   );
-  return useQuery({
-    queryKey: ["get post current", session!.user.id],
-    queryFn: () => getPostWithDetails(to, from, session!.user.id),
+
+  return useInfiniteQuery({
+    queryKey: ["get post current", session?.user.id],
+    queryFn: ({ pageParam = 0 }) =>
+      getPostWithDetails(pageParam, pageSize, session!.user.id),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, _allPages, lastPageParam) => {
+      if (!lastPage || lastPage.length < pageSize) return undefined;
+      return lastPageParam + pageSize;
+    },
     enabled: !!session,
   });
 };

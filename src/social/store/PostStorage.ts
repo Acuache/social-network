@@ -1,17 +1,18 @@
 import { supabase } from "@/config/supabase.config";
 import type { PostPublicationResponse } from "@/interfaces/PostPublicationResponse.interface";
+import type { PublicationWithDetailsResponse } from "@/interfaces/PublicationWithDetailsResponse.interface";
 import { create } from "zustand";
 
 interface PostStorage {
   insertPost: (
     dataPost: Partial<PostPublicationResponse>,
   ) => Promise<PostPublicationResponse>;
-  dataPost: PostPublicationResponse[] | null;
+  dataPost: PublicationWithDetailsResponse[] | null;
   getPostWithDetails: (
     to: number,
     limit: number,
     id_user: string,
-  ) => Promise<PostPublicationResponse[]>;
+  ) => Promise<PublicationWithDetailsResponse[]>;
 }
 
 export const usePostStorage = create<PostStorage>()((set) => ({
