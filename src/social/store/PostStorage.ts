@@ -13,6 +13,7 @@ interface PostStorage {
     limit: number,
     id_user: string,
   ) => Promise<PublicationWithDetailsResponse[]>;
+  likePost: (object: any) => Promise<void>;
 }
 
 export const usePostStorage = create<PostStorage>()((set) => ({
@@ -58,5 +59,10 @@ export const usePostStorage = create<PostStorage>()((set) => ({
     if (error) throw error;
     set({ dataPost: data });
     return data;
+  },
+
+  likePost: async (object: any) => {
+    const { error } = await supabase.rpc("toggle_like", object);
+    if (error) throw error;
   },
 }));

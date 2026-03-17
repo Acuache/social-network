@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePostStorage } from "../store/PostStorage";
 import { useModalStorage } from "../store/useModalStorage";
 import { toast } from "sonner";
@@ -39,5 +39,21 @@ export const usePostQuery = (pageSize = 9) => {
       return lastPageParam + pageSize;
     },
     enabled: !!session,
+  });
+};
+
+export const useLikePostMutate = () => {
+  const likePost = usePostStorage((state) => state.likePost);
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ["like post"],
+    mutationFn: likePost,
+    onError: (error) => {
+      toast.error("Algo salio mal, intente nuevamente...");
+      console.log(error.message);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get post current"] });
+    },
   });
 };
