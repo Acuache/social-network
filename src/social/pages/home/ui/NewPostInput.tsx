@@ -22,7 +22,7 @@ export const NewPostInput = () => {
           <AvatarFallback>{currentUser.name[0]}{currentUser.lastName[0]}</AvatarFallback>
         </Avatar>
         <div onClick={setShowModal} className="flex-1 text-gray-400 cursor-pointer hover:bg-gray-100 flex items-center px-1 rounded-md pl-2 dark:hover:bg-gray-500 dark:text-gray-200">
-          ¿En que estás pensando, {currentUser.lastName}?
+          ¿En que estás pensando, {currentUser.lastName.length == 0 ? currentUser.name : currentUser.lastName}?
         </div>
       </div>
       <div className="flex items-center justify-between">
