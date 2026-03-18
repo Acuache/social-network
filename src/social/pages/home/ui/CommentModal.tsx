@@ -135,7 +135,7 @@ export const CommentModal = ({ post, onClose }: CommentModalProps) => {
 
           <Separator />
 
-          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 customScroll">
             {isLoading ? (
               <div className="flex justify-center py-8">
                 <Loader2 className="size-6 animate-spin text-muted-foreground" />
