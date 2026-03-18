@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { CircleUserRound, House, LogOut, MessageSquare, Moon, Sun, UserSearch } from "lucide-react"
+import { CircleUserRound, House, LogOut, MessageSquare, Moon, Search, Sun, UserSearch } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Link, useLocation } from "react-router"
@@ -25,6 +25,11 @@ const projects = [
     name: 'Inicio',
     url: '/',
     icon: House
+  },
+  {
+    name: 'Buscar',
+    url: '/buscar',
+    icon: Search
   },
   {
     name: 'Usuarios',
