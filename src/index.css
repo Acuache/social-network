@@ -143,3 +143,20 @@
     @apply border border-gray-500 dark:border-gray-400;
   }
 }
+
+/*Scroll Chrome*/
+:root {
+  --color-scrollbar: #d3d3d4;
+  --color-background-scrollbar: #eee;
+}
+
+.customScroll::-webkit-scrollbar {
+  width: 25px;
+  background: transparent;
+}
+.customScroll::-webkit-scrollbar-thumb {
+  border: 10px solid transparent;
+  box-shadow: inset 0 0 0 10px var(--color-scrollbar);
+  border-radius: 40px;
+}
+/*Scroll Moz*/

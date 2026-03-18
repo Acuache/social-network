@@ -3,7 +3,6 @@ import { CurrentPost } from "./CurrentPost"
 import { NewPostInput } from "./NewPostInput"
 import { useEffect, useRef, useCallback } from "react"
 import { Loader2 } from "lucide-react"
-
 export const MainHome = () => {
   const {
     data,
@@ -41,7 +40,7 @@ export const MainHome = () => {
   const allPosts = data?.pages.flat() ?? []
 
   return (
-    <div className="flex flex-col gap-7 overflow-auto p-4">
+    <div className={`flex flex-col gap-7 overflow-auto p-4 customScroll`} >
       <NewPostInput />
       {allPosts.map((post, index) => (
         <div

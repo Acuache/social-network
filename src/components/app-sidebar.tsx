@@ -81,8 +81,8 @@ export function AppSidebar() {
                       isActive={pathname === project.url}
                       className="[&>svg]:size-6 text-base hover:bg-gray-200! hover:text-blue-600! transition duration-300 data-[active=true]:bg-gray-200! data-[active=true]:text-blue-500!"
                     >
-                      <Link to={project.url}>
-                        <Icon />
+                      <Link to={project.url} className="">
+                        <Icon className="m-auto md:m-0" />
                         <span className="hidden md:inline">{project.name}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -101,7 +101,7 @@ export function AppSidebar() {
               className="[&>svg]:size-5 text-sm text-nowrap mb-2"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
-              {theme === "dark" ? <Sun /> : <Moon />}
+              {theme === "dark" ? <Sun className="m-auto md:m-0" /> : <Moon className="m-auto md:m-0" />}
               <span className="hidden md:inline">
                 {theme === "dark" ? "Modo Claro" : "Modo Oscuro"}
               </span>
@@ -109,14 +109,14 @@ export function AppSidebar() {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton className="bg-black text-white [&>svg]:size-5 text-sm text-nowrap" onClick={setShowModal}>
-              <MessageSquare /> <span className="hidden md:inline">Nuevo Post</span>
+            <SidebarMenuButton className=" [&>svg]:size-5 text-sm text-nowrap" onClick={setShowModal}>
+              <MessageSquare className="m-auto md:m-0" /> <span className="hidden md:inline">Nuevo Post</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={() => signOutMutate()} disabled={signOutIsPending} className="bg-black text-white [&>svg]:size-5 text-sm text-nowrap">
-              <LogOut /> <span className="hidden md:inline">Cerrar Sesión</span>
+            <SidebarMenuButton onClick={() => signOutMutate()} disabled={signOutIsPending} className=" [&>svg]:size-5 text-sm text-nowrap">
+              <LogOut className="m-auto md:m-0" /> <span className="hidden md:inline">Cerrar Sesión</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

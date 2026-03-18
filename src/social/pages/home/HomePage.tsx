@@ -2,7 +2,6 @@ import { useSupabaseSubscription } from "@/hooks/useSupabaseSubscription"
 import { HeaderHome } from "./ui/HeaderHome"
 import { MainHome } from "./ui/MainHome"
 import { SelectAvatarUser } from "@/social/components/SelectAvatarUser"
-
 export const HomePage = () => {
   useSupabaseSubscription({
     channelName: 'public:publications',
