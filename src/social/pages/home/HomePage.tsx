@@ -12,6 +12,15 @@ export const HomePage = () => {
     },
     queryKey: ['get post current']
   })
+  useSupabaseSubscription({
+    channelName: 'public:comments',
+    options: {
+      event: '*',
+      schema: 'public',
+      table: 'comments',
+    },
+    queryKey: ['get comments']
+  })
   return (
     <div className="flex flex-col flex-1 min-h-0 border-mode">
       <HeaderHome />
