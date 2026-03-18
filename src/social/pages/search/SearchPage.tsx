@@ -2,10 +2,11 @@ import { useState, useEffect } from "react"
 import { useSearchParams } from "react-router"
 import { Input } from "@/components/ui/input"
 import { useSearchQuery } from "@/social/stack/SearchStack"
+import { usePublicationByIdQuery } from "@/social/stack/PostStack"
 import { CardUser } from "@/social/pages/users/ui/CardUser"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
-import { Link } from "react-router"
+import { CommentModal } from "@/social/pages/home/ui/CommentModal"
 import { Loader2, Search, User, FileText, Hash } from "lucide-react"
 import type { PublicationSearchResult } from "@/social/store/SearchStorage"
 import type { User as UserType } from "@/auth/interfaces/UserResponse.interface"
@@ -18,6 +19,9 @@ export const SearchPage = () => {
   const [query, setQuery] = useState(q)
   const [debouncedQuery, setDebouncedQuery] = useState(q)
   const [activeTab, setActiveTab] = useState<Tab>("all")
+  const [selectedPublicationId, setSelectedPublicationId] = useState<number | null>(null)
+
+  const { data: selectedPublication, isLoading: isLoadingPublication } = usePublicationByIdQuery(selectedPublicationId)
 
   useEffect(() => {
     setQuery(q)
@@ -86,6 +90,14 @@ export const SearchPage = () => {
             <p className="text-center text-muted-foreground py-12">
               No se encontraron resultados para &quot;{debouncedQuery}&quot;
             </p>
+          ) : activeTab === "users" && users.length === 0 ? (
+            <p className="text-center text-muted-foreground py-12">
+              No se encontró ese Usuario
+            </p>
+          ) : activeTab === "publications" && publications.length === 0 ? (
+            <p className="text-center text-muted-foreground py-12">
+              No se encontró esa Publicación
+            </p>
           ) : (
             <div className="flex-1 overflow-auto customScroll space-y-6">
               {(activeTab === "all" || activeTab === "users") && users.length > 0 && (
@@ -96,9 +108,9 @@ export const SearchPage = () => {
                   </h2>
                   <div className="flex flex-col gap-2">
                     {users.map((user) => (
-                      <Link key={user.id} to="/usuarios">
+                      <div key={user.id}>
                         <CardUser user={user as UserType} />
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 </section>
@@ -112,7 +124,11 @@ export const SearchPage = () => {
                   </h2>
                   <div className="flex flex-col gap-3">
                     {publications.map((pub) => (
-                      <PublicationSearchCard key={pub.id} publication={pub} />
+                      <PublicationSearchCard
+                        key={pub.id}
+                        publication={pub}
+                        onClick={() => setSelectedPublicationId(pub.id)}
+                      />
                     ))}
                   </div>
                 </section>
@@ -129,13 +145,53 @@ export const SearchPage = () => {
           <p className="text-xs">Usuarios, publicaciones o #hashtags</p>
         </div>
       )}
+
+      {selectedPublicationId && (
+        <>
+          {isLoadingPublication ? (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
+              <Loader2 className="size-10 animate-spin text-white" />
+            </div>
+          ) : selectedPublication ? (
+            <CommentModal
+              post={selectedPublication}
+              onClose={() => setSelectedPublicationId(null)}
+            />
+          ) : (
+            <div
+              className="fixed inset-0 flex items-center justify-center bg-black/60 z-50"
+              onClick={() => setSelectedPublicationId(null)}
+            >
+              <div
+                className="bg-background p-4 rounded-lg text-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="text-sm text-muted-foreground">No se pudo cargar la publicación</p>
+                <button
+                  type="button"
+                  onClick={() => setSelectedPublicationId(null)}
+                  className="mt-2 text-sm text-primary hover:underline"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   )
 }
 
-function PublicationSearchCard({ publication }: { publication: PublicationSearchResult }) {
+function PublicationSearchCard({
+  publication,
+  onClick,
+}: {
+  publication: PublicationSearchResult
+  onClick: () => void
+}) {
   return (
-    <Link to="/">
+    <button type="button" onClick={onClick} className="w-full text-left">
       <Card className="hover:bg-muted/50 transition-colors">
         <CardContent className="flex gap-4 p-4">
           <Avatar className="size-10 shrink-0">
@@ -152,6 +208,6 @@ function PublicationSearchCard({ publication }: { publication: PublicationSearch
           </div>
         </CardContent>
       </Card>
-    </Link>
+    </button>
   )
 }

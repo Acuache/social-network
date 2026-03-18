@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { usePostStorage } from "../store/PostStorage";
 import { useModalStorage } from "../store/useModalStorage";
 import { toast } from "sonner";
@@ -42,6 +42,17 @@ export const usePostQuery = (pageSize = 9) => {
   });
 };
 
+export const usePublicationByIdQuery = (publicationId: number | null) => {
+  const session = useSessionStore((state) => state.session);
+  const getPublicationById = usePostStorage((state) => state.getPublicationById);
+
+  return useQuery({
+    queryKey: ["publication", publicationId, session?.user.id],
+    queryFn: () => getPublicationById(publicationId!, session!.user.id),
+    enabled: !!publicationId && !!session,
+  });
+};
+
 export const useLikePostMutate = () => {
   const likePost = usePostStorage((state) => state.likePost);
   const queryClient = useQueryClient();
@@ -54,6 +65,7 @@ export const useLikePostMutate = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get post current"] });
+      queryClient.invalidateQueries({ queryKey: ["publication"] });
     },
   });
 };

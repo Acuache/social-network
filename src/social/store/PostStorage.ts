@@ -13,6 +13,10 @@ interface PostStorage {
     limit: number,
     id_user: string,
   ) => Promise<PublicationWithDetailsResponse[]>;
+  getPublicationById: (
+    publicationId: number,
+    id_user: string,
+  ) => Promise<PublicationWithDetailsResponse | null>;
   likePost: (object: any) => Promise<void>;
 }
 
@@ -59,6 +63,51 @@ export const usePostStorage = create<PostStorage>()((set) => ({
     if (error) throw error;
     set({ dataPost: data });
     return data;
+  },
+
+  getPublicationById: async (publicationId: number, id_user: string) => {
+    const { data: pub, error: pubError } = await supabase
+      .from("publications")
+      .select(`
+        id, description, file, created_at, id_user, likes, type_file,
+        users!id_user (name, lastName, avatar, email)
+      `)
+      .eq("id", publicationId)
+      .single();
+
+    if (pubError || !pub) return null;
+
+    const users = (pub.users ?? pub.user) as { name: string; lastName: string; avatar: string | null; email: string } | null;
+
+    const { count: commentsCount } = await supabase
+      .from("comments")
+      .select("*", { count: "exact", head: true })
+      .eq("id_publication", publicationId);
+
+    let like_user_current = false;
+    const { data: likeData } = await supabase
+      .from("likes")
+      .select("id")
+      .eq("id_publication", publicationId)
+      .eq("id_user", id_user)
+      .maybeSingle();
+    if (likeData) like_user_current = true;
+
+    return {
+      id: pub.id,
+      description: pub.description ?? "",
+      file: pub.file,
+      created_at: pub.created_at,
+      id_user: pub.id_user,
+      likes: pub.likes ?? 0,
+      type_file: pub.type_file,
+      user_name: users?.name ?? "",
+      user_lastname: users?.lastName ?? "",
+      user_email: users?.email ?? "",
+      user_avatar: users?.avatar ?? "",
+      comments_count: commentsCount ?? 0,
+      like_user_current,
+    } as PublicationWithDetailsResponse;
   },
 
   likePost: async (object: any) => {

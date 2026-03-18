@@ -24,13 +24,9 @@ export const CurrentPost = (postCurrent: PublicationWithDetailsResponse) => {
   const { mutate: postLikeMutate } = useLikePostMutate()
   const [showComments, setShowComments] = useState(false)
 
-  const handleLikePost = () => {
-    const params = {
-      p_post_id: postCurrent.id,
-      p_user_id: session!.user.id
-    }
-    console.log(params)
-    postLikeMutate(params)
+  const handleLikePost = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    postLikeMutate({ p_post_id: postCurrent.id, p_user_id: session!.user.id })
   }
 
   useEffect(() => {
@@ -83,7 +79,7 @@ export const CurrentPost = (postCurrent: PublicationWithDetailsResponse) => {
         </CardContent>
         <CardFooter className="mt-2 flex gap-5">
           <div className="flex gap-1 items-center text-sm">
-            <Button variant="outline" size="icon" onClick={() => handleLikePost()}>
+            <Button variant="outline" size="icon" onClick={handleLikePost}>
               <Heart className="text-red-700" fill={postCurrent.like_user_current ? "currentColor" : "none"} />
             </Button>
             <span>( {postCurrent.likes} )</span>
