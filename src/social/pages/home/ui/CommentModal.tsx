@@ -11,6 +11,7 @@ import utc from "dayjs/plugin/utc"
 import relativeTime from "dayjs/plugin/relativeTime"
 import "dayjs/locale/es"
 import { useGetComments, userGetCommentMutate } from "@/social/stack/CommentStack"
+import { useLikePostMutate } from "@/social/stack/PostStack"
 import { useSessionStore } from "@/auth/storage/AuthStorage"
 
 dayjs.extend(relativeTime)
@@ -42,6 +43,12 @@ export const CommentModal = ({ post, onClose }: CommentModalProps) => {
 
   const session = useSessionStore(state => state.session)
   const { mutate: commentMutate } = userGetCommentMutate()
+  const { mutate: likeMutate } = useLikePostMutate()
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    likeMutate({ p_post_id: post.id, p_user_id: session!.user.id })
+  }
   const handleCommentInsert = () => {
     const object = {
       comment: textareaRef.current!.value,
@@ -126,10 +133,14 @@ export const CommentModal = ({ post, onClose }: CommentModalProps) => {
           )}
 
           <div className="flex items-center gap-4 px-4 py-2 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={handleLike}
+              className="flex items-center gap-1 hover:opacity-80 transition-opacity text-muted-foreground"
+            >
               <Heart className="size-4 text-red-700" fill={post.like_user_current ? "currentColor" : "none"} />
               {post.likes} likes
-            </span>
+            </button>
             <span>{post.comments_count} comentarios</span>
           </div>
 

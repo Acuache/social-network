@@ -1,14 +1,19 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCommentStorage } from "../store/CommentStorage";
 import { toast } from "sonner";
 
 export const userGetCommentMutate = () => {
+  const queryClient = useQueryClient();
   const insertComment = useCommentStorage((state) => state.insertComment);
   return useMutation({
     mutationKey: ["insert comment"],
     mutationFn: insertComment,
     onError: () => toast.error("Intente nuevamente"),
-    onSuccess: () => toast.success("Agregado correctamente..."),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["get comments", variables.id_publication] });
+      queryClient.invalidateQueries({ queryKey: ["publication"] });
+      toast.success("Agregado correctamente...");
+    },
   });
 };
 

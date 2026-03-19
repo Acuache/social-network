@@ -7,6 +7,7 @@ import { HomePage } from "@/social/pages/home/HomePage";
 import { SocialLayout } from "@/social/layouts/SocialLayout";
 import { PerfilPage } from "@/social/pages/perfil/PerfilPage";
 import { UsersPage } from "@/social/pages/users/UsersPage";
+import { SearchPage } from "@/social/pages/search/SearchPage";
 import { AuthenticatedRoute, GuestRoute } from "./ProtectedRoutes";
 
 export const router = createBrowserRouter([
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: 'usuarios',
         element: <UsersPage />
+      },
+      {
+        path: 'buscar',
+        element: <SearchPage />
       },
     ]
   },
