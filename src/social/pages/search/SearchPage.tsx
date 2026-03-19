@@ -197,7 +197,7 @@ function PublicationSearchCard({
           <Avatar className="size-10 shrink-0">
             <AvatarImage src={publication.user_avatar ?? undefined} />
             <AvatarFallback className="text-sm">
-              {publication.user_name[0]}{publication.user_lastname[0]}
+              {publication.user_name?.[0]}{publication.user_lastname?.[0] ?? "?"}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">

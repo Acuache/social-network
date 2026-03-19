@@ -73,7 +73,7 @@ export const CommentModal = ({ post, onClose }: CommentModalProps) => {
           <div className="flex items-center gap-3">
             <Avatar className="size-10">
               <AvatarImage src={post.user_avatar || ""} />
-              <AvatarFallback>{post.user_name[0]}{post.user_lastname[0]}</AvatarFallback>
+              <AvatarFallback>{post.user_name?.[0]}{post.user_lastname?.[0] ?? "?"}</AvatarFallback>
             </Avatar>
             <div>
               <p className="font-semibold text-sm">{post.user_name} {post.user_lastname}</p>
@@ -112,7 +112,7 @@ export const CommentModal = ({ post, onClose }: CommentModalProps) => {
             <div className="flex items-center gap-3">
               <Avatar className="size-10">
                 <AvatarImage src={post.user_avatar || ""} />
-                <AvatarFallback>{post.user_name[0]}{post.user_lastname[0]}</AvatarFallback>
+                <AvatarFallback>{post.user_name?.[0]}{post.user_lastname?.[0] ?? "?"}</AvatarFallback>
               </Avatar>
               <div>
                 <p className="font-semibold text-sm">{post.user_name} {post.user_lastname}</p>

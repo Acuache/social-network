@@ -68,16 +68,29 @@ export const usePostStorage = create<PostStorage>()((set) => ({
   getPublicationById: async (publicationId: number, id_user: string) => {
     const { data: pub, error: pubError } = await supabase
       .from("publications")
-      .select(`
+      .select(
+        `
         id, description, file, created_at, id_user, likes, type_file,
         users!id_user (name, lastName, avatar, email)
-      `)
+      `,
+      )
       .eq("id", publicationId)
       .single();
 
     if (pubError || !pub) return null;
 
-    const users = (pub.users ?? pub.user) as { name: string; lastName: string; avatar: string | null; email: string } | null;
+    const usersRaw = pub.users;
+    const usersData = Array.isArray(usersRaw)
+      ? (usersRaw[0] as Record<string, unknown> | undefined)
+      : (usersRaw as Record<string, unknown> | null | undefined);
+    const users = usersData
+      ? {
+          name: String(usersData.name ?? ""),
+          lastName: String(usersData.lastName ?? usersData.lastname ?? usersData.last_name ?? ""),
+          avatar: (usersData.avatar as string | null) ?? null,
+          email: String(usersData.email ?? ""),
+        }
+      : null;
 
     const { count: commentsCount } = await supabase
       .from("comments")

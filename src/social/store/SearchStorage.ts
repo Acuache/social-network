@@ -55,7 +55,17 @@ export const useSearchStorage = create<SearchStorage>()(() => ({
     if (!data?.length) return []
 
     return data.map((p: Record<string, unknown>) => {
-      const users = (p.users ?? p.user) as { name: string; lastName: string; avatar: string | null } | null
+      const usersRaw = p.users;
+      const usersData = Array.isArray(usersRaw)
+        ? (usersRaw[0] as Record<string, unknown> | undefined)
+        : (usersRaw as Record<string, unknown> | null | undefined);
+      const users = usersData
+        ? {
+            name: String(usersData.name ?? ""),
+            lastName: String(usersData.lastName ?? usersData.lastname ?? usersData.last_name ?? ""),
+            avatar: (usersData.avatar as string | null) ?? null,
+          }
+        : null;
       return {
         id: p.id as number,
         description: (p.description as string) ?? "",
