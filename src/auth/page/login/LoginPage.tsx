@@ -63,7 +63,7 @@ const LoginPage = () => {
                 id="email"
                 type="email"
                 placeholder="tu@email.com"
-                autoComplete="email"
+                autoComplete="off"
               />
             </div>
             <div className="space-y-2">

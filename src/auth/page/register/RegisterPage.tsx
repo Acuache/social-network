@@ -62,6 +62,7 @@ const RegisterPage = () => {
                 id="name"
                 type="text"
                 placeholder="Juan"
+                autoComplete="off"
               />
             </div>
             <div className="space-y-2">
@@ -86,6 +87,7 @@ const RegisterPage = () => {
                 id="lastName"
                 type="text"
                 placeholder="Pérez"
+                autoComplete="off"
               />
             </div>
           </div>
@@ -114,6 +116,7 @@ const RegisterPage = () => {
               id="email"
               type="text"
               placeholder="tu@email.com"
+              autoComplete="off"
             />
           </div>
           <div className="space-y-2">
