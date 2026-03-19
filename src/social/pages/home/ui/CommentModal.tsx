@@ -160,11 +160,11 @@ export const CommentModal = ({ post, onClose }: CommentModalProps) => {
                 <div key={comment.id} className="flex gap-3">
                   <Avatar className="size-8 shrink-0">
                     <AvatarImage src={comment.user_avatar || ''} />
-                    <AvatarFallback>{comment.user_name[0]}</AvatarFallback>
+                    <AvatarFallback>{comment.user_name?.[0]}{comment.user_lastname?.[0] ?? '?'}</AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <div className="bg-muted rounded-xl px-3 py-2">
-                      <p className="font-semibold text-xs">{comment.user_name} {comment.user_lastName}</p>
+                      <p className="font-semibold text-xs">{comment.user_name} {comment.user_lastname}</p>
                       <p className="text-sm">{comment.comment}</p>
                     </div>
                     <p className="text-xs text-muted-foreground mt-1 ml-2">
