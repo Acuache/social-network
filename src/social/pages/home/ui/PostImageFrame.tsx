@@ -10,7 +10,7 @@ export const PostImageFrame = ({ urlImg }: Props) => {
       <img
         ref={imgRef}
         crossOrigin="anonymous"
-        className="object-contain max-h-[500px] h-full min-h-[500px]"
+        className="object-contain max-h-[500px] h-full "
         src={urlImg}
         alt="" />
     </div>
