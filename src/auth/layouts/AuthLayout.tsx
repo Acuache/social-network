@@ -6,7 +6,7 @@ const AuthLayout = () => {
     <div className="flex min-h-screen"
     >
       {/* Left side - Decorative */}
-      <div className="hidden lg:flex lg:w-1/2 bg-primary dark:bg-black relative overflow-hidden items-center justify-center">
+      <div className="hidden lg:flex lg:w-1/2 bg-primary dark:bg-black relative overflow-hidden items-center justify-center ">
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
           <Galaxy />
         </div>
@@ -24,11 +24,11 @@ const AuthLayout = () => {
       </div>
 
       {/* Right side - Form */}
-      <div className="flex w-full lg:w-1/2 items-center justify-center p-8 bg-background relative dark:bg-[#282828]">
-        <div style={{ width: '100%', height: '100%', position: 'absolute' }} className="z-1 lg:hidden dark:bg-black">
+      <div className="flex w-full lg:w-1/2 items-center justify-center p-8 bg-background relative dark:bg-[#282828] ">
+        <div style={{ width: '100%', height: '100%', position: 'absolute' }} className="z-1 lg:hidden dark:bg-black bg-black lg:bg-none">
           <Galaxy />
         </div>
-        <div className="w-full max-w-md z-2">
+        <div className="w-full max-w-md z-2 ">
           <Outlet />
         </div>
       </div>
